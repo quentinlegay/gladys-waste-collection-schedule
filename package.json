@@ -1,6 +1,6 @@
 {
   "name": "gladys-waste-collection-schedule",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "Gladys Assistant external integration: waste collection days from your own schedule or from a provider (Publidata: SMICTOM Valcobreizh, Val d'Ille-Aubigné…).",
   "type": "module",
