@@ -58,6 +58,10 @@ function features(ids, language, textName) {
       external_id: ids.feature(FEATURE.NEXT_DATE),
       category: DEVICE_FEATURE_CATEGORIES.TEXT,
       type: DEVICE_FEATURE_TYPES.TEXT.TEXT,
+      // Meaningless for a text, but Gladys refuses a feature without them
+      // (t_device_feature.min / max cannot be null).
+      min: 0,
+      max: 0,
       read_only: true,
       has_feedback: false,
       keep_history: false,

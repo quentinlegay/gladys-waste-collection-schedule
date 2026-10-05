@@ -56,6 +56,9 @@ test('devices poll every minute (a value Gladys accepts) with two read-only sens
     assert.equal(text.external_id, `${device.external_id}:next_date`);
     for (const feature of device.features) {
       assert.equal(feature.read_only, true);
+      // Gladys rejects the whole device when min or max is missing (HTTP 422).
+      assert.equal(typeof feature.min, 'number', `${feature.external_id} min`);
+      assert.equal(typeof feature.max, 'number', `${feature.external_id} max`);
     }
   }
 });
