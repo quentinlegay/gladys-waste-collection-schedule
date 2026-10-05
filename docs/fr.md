@@ -25,18 +25,33 @@ choisissez « SMICTOM Valcobreizh ».
 
 ## Configuration avec un fournisseur
 
-1. Dans l'onglet **Configuration**, choisissez votre fournisseur dans
-   **Source du planning**.
-2. Saisissez votre **adresse complète** : numéro, rue, code postal et commune,
-   par exemple `1 rue de la Mairie 35250 Aubigné`. Une même commune peut avoir
-   plusieurs secteurs de collecte (bourg, hameaux, certaines rues) :
-   l'adresse permet de trouver le bon.
-3. Enregistrez, puis cliquez sur **Afficher le planning** : le message affiche
-   l'**adresse reconnue** et les prochains jours de chaque type de déchet.
-   Si l'adresse reconnue n'est pas la vôtre, précisez-la ou renseignez le
-   **code INSEE** de votre commune (à ne pas confondre avec le code postal ;
-   Aubigné : 35007).
+1. Vérifiez que votre maison est **placée sur la carte** dans Gladys
+   (**Paramètres → Maisons**). À l'installation, l'intégration demande
+   l'accès à cette position : c'est elle qui donne votre adresse.
+2. Dans l'onglet **Configuration** de l'intégration, choisissez votre
+   fournisseur dans **Source du planning**.
+3. Enregistrez, puis cliquez sur **Afficher le planning** : le message
+   affiche la **maison utilisée**, l'**adresse reconnue** à sa position et
+   les prochains jours de chaque type de déchet.
 4. Ouvrez l'onglet **Découverte** et ajoutez les appareils.
+
+Une même commune peut avoir plusieurs secteurs de collecte (bourg, hameaux,
+certaines rues) : c'est l'adresse qui permet de trouver le bon. Si l'adresse
+reconnue n'est pas la vôtre (maison mal placée sur la carte), corrigez la
+position dans Gladys.
+
+**Plusieurs maisons ?** Par défaut, la première maison (par ordre
+alphabétique) qui a une position est utilisée. Pour en choisir une autre,
+saisissez son **nom** dans le champ **Maison (si plusieurs)** ; l'aperçu du
+planning liste vos maisons. Gladys ne permet pas encore à une intégration de
+proposer les maisons dans une liste déroulante, d'où ce champ texte.
+
+**Saisir une adresse à la place.** Le champ **Adresse** (numéro, rue, code
+postal et commune, par exemple `1 rue de la Mairie 35250 Aubigné`) est
+prioritaire sur la maison : utile pour un autre lieu, ou si la position de
+la maison ne convient pas. Si l'adresse n'est pas reconnue, ajoutez le
+**code INSEE** de la commune (à ne pas confondre avec le code postal ;
+Aubigné : 35007).
 
 Le calendrier du fournisseur est retéléchargé toutes les 6 heures. En cas de
 panne réseau, les dernières données reçues restent utilisées (elles sont
@@ -155,16 +170,35 @@ Chacun porte deux capteurs :
 Les valeurs sont mises à jour chaque minute : le compteur change au plus
 une minute après minuit.
 
-## Exemple de scène : « sortir la poubelle »
+## Notifications : le déclencheur « Rappel de collecte »
 
-1. Déclencheur : **Horaire**, tous les jours à 19:00.
-2. Action : **Continuer seulement si** l'appareil « Collecte Ordures
-   ménagères », capteur « Jours avant la collecte », **est égal à 1**.
-3. Action : **Envoyer un message** « Pensez à sortir les ordures ménagères
-   ce soir 🗑️ ».
+L'intégration ajoute un déclencheur de scène **Rappel de collecte des
+déchets**. Dans **Scènes → Nouvelle scène**, choisissez-le, puis réglez :
 
-Dupliquez la scène pour les emballages, ou utilisez l'appareil « Prochaine
-collecte » pour une seule scène tous types confondus.
+- **Type de déchet** : un type précis (ordures ménagères, emballages…), ou
+  **Toutes les collectes** : un seul déclenchement par jour de collecte, qui
+  liste tous les types du jour (pas de double notification quand les
+  ordures et les emballages passent le même jour) ;
+- **Quand** : la veille à 17h, 18h, 19h, 20h, 21h ou 22h, ou le jour même à
+  5h, 6h, 7h, 8h ou 12h.
+
+Ajoutez ensuite l'action **Envoyer un message**. Le texte peut utiliser les
+variables du déclencheur :
+
+- **Déchets collectés** : « Ordures ménagères et Emballages (bac jaune) » ;
+- **Date de la collecte** : « mardi 6 octobre 2026 » ;
+- **Jours avant la collecte** : 1 la veille, 0 le jour même.
+
+Exemple : « 🗑️ Demain, sortez : _Déchets collectés_ ».
+
+Le rappel tient compte des jours fériés et des exceptions : si la collecte
+du mardi passe au mercredi, le rappel « la veille à 19h » arrive le mardi
+soir. Si Gladys ou l'intégration était arrêtée au moment prévu, un rappel en
+retard de moins de 30 minutes est encore envoyé ; au-delà, il est abandonné.
+
+**Sans le déclencheur**, avec les capteurs : déclencheur **Horaire** tous les
+jours à 19:00, puis **Continuer seulement si** le capteur « Jours avant la
+collecte » de l'appareil voulu **est égal à 1**, puis **Envoyer un message**.
 
 ## Widget
 

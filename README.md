@@ -18,9 +18,14 @@ The days come from:
   with a provider, it completes the types the provider does not return;
 - **manual exceptions** on top (`omr: 25/12/2026 > 26/12/2026`).
 
+The collection sector is found from the **position of the Gladys house**
+(`location: true` + `gladys.getHouses()`, reverse-geocoded with the Base
+Adresse Nationale), or from a typed address.
+
 It creates a "Next collection" device plus one device per waste type, each with
-a `days_until` sensor (0 = today, 1 = tomorrow…) to drive scenes, and a
-`next_date` text sensor; plus an "upcoming collections" dashboard widget.
+a `days_until` sensor (0 = today, 1 = tomorrow…) and a `next_date` text sensor;
+a `collection_reminder` scene trigger (the day before at 19:00, the same day at
+06:00…) to send notifications; and an "upcoming collections" dashboard widget.
 
 User documentation: [docs/fr.md](docs/fr.md) / [docs/en.md](docs/en.md).
 
@@ -32,7 +37,8 @@ User documentation: [docs/fr.md](docs/fr.md) / [docs/en.md](docs/en.md).
 ├─ src/
 │  ├─ schedule.js               # merges provider + custom rules + exceptions, cache
 │  ├─ providers/
-│  │  ├─ index.js               # provider registry (keys are frozen)
+│  │  ├─ index.js               # provider registry (keys are frozen), house choice
+│  │  ├─ ban.js                 # house position → address (BAN reverse geocoding)
 │  │  └─ publidata.js           # Publidata API: geocoder → address id → services
 │  ├─ openingHours.js           # OSM `opening_hours` day matcher (Publidata rules)
 │  ├─ customRules.js            # plain-language rules (fr/en) + exceptions
@@ -41,6 +47,7 @@ User documentation: [docs/fr.md](docs/fr.md) / [docs/en.md](docs/en.md).
 │  ├─ wasteTypes.js             # waste types (keys are frozen)
 │  ├─ devices/                  # discovery payloads + states
 │  ├─ widget.js                 # `upcoming_collections` dashboard widget
+│  ├─ scenes.js                 # `collection_reminder` scene trigger
 │  ├─ actions.js                # "Preview the schedule" / "Test a rule" buttons
 │  └─ config.js                 # config defaults + normalization
 ├─ test/                        # node --test, with recorded Publidata answers
@@ -50,8 +57,10 @@ User documentation: [docs/fr.md](docs/fr.md) / [docs/en.md](docs/en.md).
 
 ### How a provider works (Publidata)
 
-1. `GET https://api.publidata.io/v2/geocoder?q=<address>&citycode=<insee>&lookup=publidata`
-   → the BAN address id (e.g. `35007_0024_00001`). The address id — not the
+1. The BAN address id (e.g. `35007_0024_00001`), from the house position
+   (`GET https://data.geopf.fr/geocodage/reverse?lat=…&lon=…&index=address`)
+   or from a typed address
+   (`GET https://api.publidata.io/v2/geocoder?q=<address>&citycode=<insee>&lookup=publidata`). The address id — not the
    coordinates — selects the collection **sector**: a town may have several.
 2. `GET /v2/search?types[]=Platform::Services::WasteCollection&instances[]=<id>&address_id=<id>`
    → the services of the sector (`sectorization: "single"`), each with

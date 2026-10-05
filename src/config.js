@@ -28,6 +28,7 @@ export const ruleKey = (wasteKey) => `rule_${wasteKey}`;
 // `config_schema` of the manifest.
 export const DEFAULT_CONFIG = {
   provider: CUSTOM,
+  house: '',
   address: '',
   insee_code: '',
   publidata_instance: null,
@@ -50,6 +51,7 @@ export function normalizeConfig(raw = {}) {
   const config = {
     ...DEFAULT_CONFIG,
     provider: Object.hasOwn(PROVIDERS, raw.provider) ? raw.provider : DEFAULT_CONFIG.provider,
+    house: text(raw.house),
     address: text(raw.address),
     insee_code: text(raw.insee_code).replace(/\s/g, ''),
     publidata_instance: Number.isInteger(instance) && instance > 0 ? instance : null,

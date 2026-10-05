@@ -1,0 +1,110 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.635047, 48.294456]
+      },
+      "properties": {
+        "type": "housenumber",
+        "name": "1 Rue de la Mairie",
+        "label": "1 Rue de la Mairie 35250 Aubigné",
+        "postcode": "35250",
+        "citycode": "35007",
+        "city": "Aubigné",
+        "housenumber": "1",
+        "street": "Rue de la Mairie",
+        "id": "35007_0024_00001",
+        "distance": 0,
+        "score": 1,
+        "_type": "address"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.634901, 48.294381]
+      },
+      "properties": {
+        "type": "housenumber",
+        "name": "2 Rue de la Mairie",
+        "label": "2 Rue de la Mairie 35250 Aubigné",
+        "postcode": "35250",
+        "citycode": "35007",
+        "city": "Aubigné",
+        "housenumber": "2",
+        "street": "Rue de la Mairie",
+        "id": "35007_0024_00002",
+        "distance": 14,
+        "score": 0.9986,
+        "_type": "address"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.635286, 48.294465]
+      },
+      "properties": {
+        "type": "housenumber",
+        "name": "6 Rue d’Orgeres",
+        "label": "6 Rue d’Orgeres 35250 Aubigné",
+        "postcode": "35250",
+        "citycode": "35007",
+        "city": "Aubigné",
+        "housenumber": "6",
+        "street": "Rue d’Orgeres",
+        "id": "35007_0026_00006",
+        "distance": 18,
+        "score": 0.9982,
+        "_type": "address"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.634882, 48.294721]
+      },
+      "properties": {
+        "type": "housenumber",
+        "name": "5 Rue de la Grange",
+        "label": "5 Rue de la Grange 35250 Aubigné",
+        "postcode": "35250",
+        "citycode": "35007",
+        "city": "Aubigné",
+        "housenumber": "5",
+        "street": "Rue de la Grange",
+        "id": "35007_0025_00005",
+        "distance": 32,
+        "score": 0.9968,
+        "_type": "address"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.635405, 48.294259]
+      },
+      "properties": {
+        "type": "housenumber",
+        "name": "15 Rue d’Orgeres",
+        "label": "15 Rue d’Orgeres 35250 Aubigné",
+        "postcode": "35250",
+        "citycode": "35007",
+        "city": "Aubigné",
+        "housenumber": "15",
+        "street": "Rue d’Orgeres",
+        "id": "35007_0026_00015",
+        "distance": 34,
+        "score": 0.9966,
+        "_type": "address"
+      }
+    }
+  ]
+}

@@ -6,6 +6,7 @@
 import { CustomRuleError, parseCustomRule } from './customRules.js';
 import { formatLong, formatShort } from './dates.js';
 import { applyHolidayRule } from './holidays.js';
+import { MAX_DISTANCE_M } from './providers/ban.js';
 
 export const ACTION_PREVIEW = 'preview_schedule';
 export const ACTION_TEST_RULE = 'test_rule';
@@ -24,8 +25,26 @@ export function describeSchedule(schedule) {
     out.en.push(en);
   };
   push(`Source : ${schedule.provider.name.fr}.`, `Source: ${schedule.provider.name.en}.`);
+  if (schedule.house) {
+    push(`Maison utilisée : « ${schedule.house} ».`, `House used: "${schedule.house}".`);
+  }
   if (schedule.address) {
     push(`Adresse reconnue : ${schedule.address}.`, `Matched address: ${schedule.address}.`);
+  }
+  if (schedule.house && schedule.distance > MAX_DISTANCE_M) {
+    push(
+      `⚠ Cette adresse est à ${schedule.distance} m de la position de la maison : vérifiez la position dans Gladys, ou saisissez l'adresse.`,
+      `⚠ This address is ${schedule.distance} m from the house position: check the position in Gladys, or type the address.`,
+    );
+  }
+  const others = (schedule.houses ?? []).filter((name) => name !== schedule.house);
+  if (schedule.house && others.length) {
+    const list = others.map((name) => `« ${name} »`).join(', ');
+    const listEn = others.map((name) => `"${name}"`).join(', ');
+    push(
+      `Autres maisons : ${list} (champ « Maison » pour en choisir une).`,
+      `Other houses: ${listEn} ("House" field to pick one).`,
+    );
   }
   for (const type of schedule.types) {
     const tag = type.source === 'custom' && schedule.provider.platform ? ' (perso)' : '';
@@ -58,8 +77,8 @@ export function describeSchedule(schedule) {
 export function createActions(service) {
   return {
     // Download the provider again (bypassing the cache) and show the result.
-    async [ACTION_PREVIEW](_gladys, { config }) {
-      return describeSchedule(await service.getSchedule(config, { force: true }));
+    async [ACTION_PREVIEW](_gladys, { config, houses }) {
+      return describeSchedule(await service.getSchedule(config, { force: true, houses }));
     },
 
     // Try a rule typed in the action form, without saving anything.

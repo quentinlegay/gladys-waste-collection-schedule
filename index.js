@@ -24,6 +24,7 @@ import {
   createStatePublisher,
 } from './src/devices/index.js';
 import { createScheduleService } from './src/schedule.js';
+import { createReminderWatcher } from './src/scenes.js';
 import { WIDGET_UPCOMING_COLLECTIONS, buildUpcomingWidget } from './src/widget.js';
 
 const gladys = new GladysIntegration();
@@ -32,6 +33,28 @@ const actions = createActions(service);
 
 // Current configuration (hot-reloaded via onConfigUpdated).
 let config = normalizeConfig();
+
+// Houses of Gladys with their position (manifest `location: true`): they
+// locate the collections when no address is typed. There is no update event:
+// read again on (re)connection, on config change and on "Preview".
+let houses = [];
+
+async function loadHouses() {
+  try {
+    houses = await gladys.getHouses();
+  } catch (err) {
+    // Keep the previous list: a transient error must not lose the sector.
+    logger.warn('Cannot read the houses of Gladys', err.message);
+  }
+}
+
+const getSchedule = (options = {}) => service.getSchedule(config, { ...options, houses });
+
+// Fires the `collection_reminder` scene trigger at the chosen moments.
+const reminders = createReminderWatcher(gladys, {
+  getSchedule: () => getSchedule(),
+  getLanguage: () => config.language,
+});
 
 // Publishes only the sensor values that changed.
 const states = createStatePublisher(gladys);
@@ -65,7 +88,7 @@ function refresh({ force = false } = {}) {
  * the waste types changed, sensor states, connection status, widget.
  */
 async function doRefresh({ force }) {
-  const schedule = await service.getSchedule(config, { force });
+  const schedule = await getSchedule({ force });
 
   const devicesKey = JSON.stringify([config.language, schedule.types.map((t) => [t.key, t.label])]);
   if (devicesKey !== lastDevicesKey) {
@@ -122,7 +145,8 @@ gladys.onPoll(async () => {
 // --- Manifest actions: buttons in the Configuration screen -------------------
 for (const [actionKey, handler] of Object.entries(actions)) {
   gladys.onAction(actionKey, async (fields) => {
-    const message = await handler(gladys, { fields, config, today: today() });
+    await loadHouses();
+    const message = await handler(gladys, { fields, config, houses, today: today() });
     // A forced download may have changed the schedule: apply it right away.
     await refresh().catch((err) => logger.error('Refresh after action failed', err));
     return message;
@@ -131,13 +155,14 @@ for (const [actionKey, handler] of Object.entries(actions)) {
 
 // --- Dashboard widget: Gladys pulls the content to display -------------------
 gladys.onWidgetGet(WIDGET_UPCOMING_COLLECTIONS, async ({ settings, language }) =>
-  buildUpcomingWidget(gladys, await service.getSchedule(config), { settings, language }),
+  buildUpcomingWidget(gladys, await getSchedule(), { settings, language }),
 );
 
 // --- Configuration updated by the user ---------------------------------------
 gladys.onConfigUpdated(async (newConfig) => {
   logger.info('onConfigUpdated -> new configuration received');
   config = normalizeConfig(newConfig);
+  await loadHouses();
   await refresh({ force: true });
 });
 
@@ -146,10 +171,14 @@ gladys.on('connected', async () => {
   try {
     // 1) Fetch the config filled in by the user.
     config = normalizeConfig(await gladys.getConfig());
+    await loadHouses();
     // 2) Gladys may have restarted: publish the devices and every value again.
     lastDevicesKey = null;
     lastStatusKey = null;
     states.reset();
+    // 3) Watch the reminder moments. Started before the download below, so a
+    // download failure does not stop it.
+    reminders.start();
     await refresh();
   } catch (err) {
     logger.error('Post-connection initialization failed', err);
@@ -163,9 +192,14 @@ gladys.on('connected', async () => {
   }
 });
 
+gladys.on('disconnected', () => {
+  reminders.stop();
+});
+
 // --- Graceful shutdown -------------------------------------------------------
 gladys.handleShutdown((signal) => {
   logger.info(`Received ${signal} -> graceful shutdown`);
+  reminders.stop();
 });
 
 // --- Startup -----------------------------------------------------------------

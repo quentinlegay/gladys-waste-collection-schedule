@@ -1,6 +1,7 @@
 // -----------------------------------------------------------------------------
 // Replace the global `fetch` with canned Publidata answers (the real ones,
-// recorded for 1 rue de la Mairie, 35250 Aubigné — SMICTOM Valcobreizh).
+// recorded for 1 rue de la Mairie, 35250 Aubigné — SMICTOM Valcobreizh — and
+// the BAN reverse geocoding of that point).
 // -----------------------------------------------------------------------------
 
 import { readFileSync } from 'node:fs';
@@ -10,6 +11,7 @@ const fixture = (name) =>
 
 export const GEOCODER_AUBIGNE = fixture('publidata-geocoder-aubigne.json');
 export const SEARCH_AUBIGNE = fixture('publidata-search-aubigne.json');
+export const REVERSE_AUBIGNE = fixture('ban-reverse-aubigne.json');
 
 /**
  * Install a fake fetch. `routes` maps a URL pathname to a body (or to a
@@ -36,8 +38,9 @@ export function mockFetch(routes) {
   };
 }
 
-/** Routes answering like Publidata for Aubigné. */
+/** Routes answering like Publidata (and the BAN) for Aubigné. */
 export const AUBIGNE_ROUTES = {
   '/v2/geocoder': GEOCODER_AUBIGNE,
   '/v2/search': SEARCH_AUBIGNE,
+  '/geocodage/reverse': REVERSE_AUBIGNE,
 };

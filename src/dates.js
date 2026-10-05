@@ -125,6 +125,23 @@ export function today(now = new Date()) {
   return dayNumber(get('year'), get('month'), get('day'));
 }
 
+const CLOCK_FORMAT = new Intl.DateTimeFormat('en-GB', {
+  timeZone: TIME_ZONE,
+  hour: 'numeric',
+  minute: 'numeric',
+  hourCycle: 'h23',
+});
+
+/**
+ * Paris wall-clock time as a minute count (`day number × 1440 + minutes of
+ * the day`), to compare an instant with "the day before at 19:00".
+ */
+export function parisMinute(now = new Date()) {
+  const parts = CLOCK_FORMAT.formatToParts(now);
+  const get = (type) => Number(parts.find((p) => p.type === type).value);
+  return today(now) * 1440 + get('hour') * 60 + get('minute');
+}
+
 /** `mardi 6 octobre 2026` / `Tuesday 6 October 2026` */
 export function formatLong(dn, language = 'fr') {
   return LONG_FORMATS[lang(language)].format(new Date(dn * DAY_MS));

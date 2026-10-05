@@ -41,6 +41,9 @@ const CACHE_FILE = 'publidata-cache.json';
  * @property {{ key: string, label: string, days: number[], source: 'provider'|'custom' }[]} types
  *   upcoming days (>= today), sorted, per waste type
  * @property {string|null} address address matched by the provider
+ * @property {string|null} house Gladys house the address was deduced from
+ * @property {number|null} distance meters between that house and the address
+ * @property {string[]} houses names of the Gladys houses
  * @property {{ fr: string, en: string }[]} errors blocking problems to show the user
  * @property {string[]} warnings non-blocking problems (logged)
  * @property {number|null} fetchedAt when the provider data was downloaded
@@ -58,7 +61,7 @@ export function createScheduleService({
   dataDir = process.env.DATA_DIR ?? '/data',
   now = () => new Date(),
 } = {}) {
-  // Provider data: { id, fetchedAt, address, services, compiled }
+  // Provider data: { id, fetchedAt, address, house, distance, services, compiled }
   let cached = null;
   let lastFailure = null; // { id, at, error }
   let diskLoaded = false;
@@ -67,7 +70,13 @@ export function createScheduleService({
   let memo = null;
 
   const queryId = (query) =>
-    JSON.stringify([query.provider.key, query.instanceId, query.address, query.inseeCode]);
+    JSON.stringify([
+      query.provider.key,
+      query.instanceId,
+      query.address,
+      query.inseeCode,
+      query.house && [query.house.latitude, query.house.longitude],
+    ]);
 
   async function loadDisk() {
     if (diskLoaded) return;
@@ -125,8 +134,8 @@ export function createScheduleService({
 
   async function downloadNow(query, id, at, usable) {
     try {
-      const { address, services } = await download(query);
-      cached = { id, fetchedAt: at, address, services, compiled: null };
+      const { address, house, distance, services } = await download(query);
+      cached = { id, fetchedAt: at, address, house, distance, services, compiled: null };
       lastFailure = null;
       logger.info(`Downloaded ${services.length} collection services for "${address}"`);
       await saveDisk(cached);
@@ -141,14 +150,16 @@ export function createScheduleService({
   /**
    * Compute the schedule of a config.
    * @param {ReturnType<import('./config.js').normalizeConfig>} config
-   * @param {{ force?: boolean }} [options] force: download the provider again
+   * @param {{ force?: boolean, houses?: object[] }} [options] force: download
+   *   the provider again; houses: the houses of Gladys (`gladys.getHouses()`),
+   *   located by their position when no address is typed
    * @returns {Promise<Schedule>}
    */
-  async function getSchedule(config, { force = false } = {}) {
+  async function getSchedule(config, { force = false, houses = [] } = {}) {
     const today = todayInParis(now());
     const errors = [];
     const warnings = [];
-    const query = providerQuery(config);
+    const query = providerQuery(config, houses);
 
     let data = null;
     if (query) {
@@ -167,7 +178,7 @@ export function createScheduleService({
       }
     }
 
-    const memoKey = JSON.stringify([today, config, data?.fetchedAt ?? null, errors]);
+    const memoKey = JSON.stringify([today, config, data?.fetchedAt ?? null, errors, houses]);
     if (memo?.key === memoKey) {
       return memo.schedule;
     }
@@ -259,6 +270,9 @@ export function createScheduleService({
       today,
       types,
       address: data?.address ?? null,
+      house: data?.house ?? null,
+      distance: data?.distance ?? null,
+      houses: houses.map((h) => h.name),
       provider: findProvider(config.provider),
       errors,
       warnings,

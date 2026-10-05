@@ -11,6 +11,7 @@
   "gladys_version": ">=5.1.0",
   "cover_image": "https://raw.githubusercontent.com/quentinlegay/gladys-waste-collection-schedule/main/cover.png",
   "categories": ["services", "environment"],
+  "location": true,
   "config_schema": [
     {
       "key": "intro",
@@ -20,8 +21,8 @@
         "fr": "Pour commencer"
       },
       "description": {
-        "en": "Pick where the collection days come from. A provider knows the exact days, public holidays included: enter your address. Not covered yet? Describe your own schedule further down, in plain words. Then add the devices from the Discovery tab: a \"Next collection\" device and one device per waste type, with a \"days until collection\" sensor to use in your scenes.",
-        "fr": "Choisissez d'où viennent les jours de collecte. Un fournisseur connaît les jours exacts, jours fériés compris : saisissez votre adresse. Pas encore couvert ? Décrivez votre propre planning plus bas, en toutes lettres. Ajoutez ensuite les appareils depuis l'onglet Découverte : un appareil « Prochaine collecte » et un appareil par type de déchet, avec un capteur « jours avant la collecte » à utiliser dans vos scènes."
+        "en": "Pick where the collection days come from. A provider knows the exact days, public holidays included: it locates your collection sector from the position of your Gladys house (or from an address). Not covered yet? Describe your own schedule further down, in plain words. Then add the devices from the Discovery tab, and create scenes with the \"Waste collection reminder\" trigger to be notified.",
+        "fr": "Choisissez d'où viennent les jours de collecte. Un fournisseur connaît les jours exacts, jours fériés compris : il trouve votre secteur de collecte à partir de la position de votre maison Gladys (ou d'une adresse). Pas encore couvert ? Décrivez votre propre planning plus bas, en toutes lettres. Ajoutez ensuite les appareils depuis l'onglet Découverte, et créez des scènes avec le déclencheur « Rappel de collecte des déchets » pour être notifié."
       }
     },
     {
@@ -66,8 +67,8 @@
         "fr": "Fournisseur"
       },
       "description": {
-        "en": "Your full address: the provider finds your collection sector with it (several sectors may share a town). Add the INSEE code of the town if the address is not recognized. Use the \"Preview the schedule\" button below to check the matched address.",
-        "fr": "Votre adresse complète : le fournisseur en déduit votre secteur de collecte (une commune peut en avoir plusieurs). Ajoutez le code INSEE de la commune si l'adresse n'est pas reconnue. Le bouton « Afficher le planning » ci-dessous montre l'adresse reconnue."
+        "en": "By default, the position of your house in Gladys (Settings → Houses) gives your address, hence your collection sector (a town may have several). Several houses? Type the name of the one to use (Gladys cannot offer houses in a dropdown list yet); the \"Preview the schedule\" button lists them. To use another place, or if the house is badly placed, type an address instead: it wins over the house.",
+        "fr": "Par défaut, la position de votre maison dans Gladys (Paramètres → Maisons) donne votre adresse, donc votre secteur de collecte (une commune peut en avoir plusieurs). Plusieurs maisons ? Saisissez le nom de celle à utiliser (Gladys ne sait pas encore proposer les maisons en liste déroulante) ; le bouton « Afficher le planning » les liste. Pour un autre lieu, ou si la maison est mal placée, saisissez plutôt une adresse : elle est prioritaire sur la maison."
       },
       "links": [
         {
@@ -80,17 +81,38 @@
       ]
     },
     {
+      "key": "house",
+      "type": "string",
+      "label": {
+        "en": "House (if several)",
+        "fr": "Maison (si plusieurs)"
+      },
+      "description": {
+        "en": "Name of the Gladys house to use. Empty: the first house that has a position.",
+        "fr": "Nom de la maison Gladys à utiliser. Vide : la première maison qui a une position."
+      },
+      "placeholder": {
+        "en": "Home",
+        "fr": "Maison"
+      },
+      "required": false
+    },
+    {
       "key": "address",
       "type": "string",
       "label": {
-        "en": "Address",
-        "fr": "Adresse"
+        "en": "Address (optional, instead of the house)",
+        "fr": "Adresse (facultatif, à la place de la maison)"
       },
       "placeholder": {
         "en": "1 rue de la Mairie 35250 Aubigné",
         "fr": "1 rue de la Mairie 35250 Aubigné"
       },
-      "required": false
+      "required": false,
+      "description": {
+        "en": "Number, street, postcode and town. Leave empty to use the position of the house.",
+        "fr": "Numéro, rue, code postal et commune. Laissez vide pour utiliser la position de la maison."
+      }
     },
     {
       "key": "insee_code",
@@ -103,7 +125,11 @@
         "en": "35007",
         "fr": "35007"
       },
-      "required": false
+      "required": false,
+      "description": {
+        "en": "Only with a typed address, if it is not recognized.",
+        "fr": "Uniquement avec une adresse saisie, si elle n'est pas reconnue."
+      }
     },
     {
       "key": "publidata_instance",
@@ -388,6 +414,227 @@
             "fr": "Vide : tous les types."
           },
           "required": false
+        }
+      ]
+    }
+  ],
+  "scene_triggers": [
+    {
+      "key": "collection_reminder",
+      "label": {
+        "en": "Waste collection reminder",
+        "fr": "Rappel de collecte des déchets"
+      },
+      "description": {
+        "en": "Fired at the chosen moment before a collection, to send a notification.",
+        "fr": "Déclenché au moment choisi avant une collecte, pour envoyer une notification."
+      },
+      "fields": [
+        {
+          "key": "waste_type",
+          "type": "select",
+          "label": {
+            "en": "Waste type",
+            "fr": "Type de déchet"
+          },
+          "description": {
+            "en": "\"All collections\": a single trigger per collection day, listing every type of the day.",
+            "fr": "« Toutes les collectes » : un seul déclenchement par jour de collecte, avec tous les types du jour."
+          },
+          "required": true,
+          "default": "all",
+          "options": [
+            {
+              "value": "all",
+              "label": {
+                "en": "All collections",
+                "fr": "Toutes les collectes"
+              }
+            },
+            {
+              "value": "omr",
+              "label": {
+                "en": "Household waste",
+                "fr": "Ordures ménagères"
+              }
+            },
+            {
+              "value": "emb",
+              "label": {
+                "en": "Recycling (yellow bin)",
+                "fr": "Emballages (bac jaune)"
+              }
+            },
+            {
+              "value": "verre",
+              "label": {
+                "en": "Glass",
+                "fr": "Verre"
+              }
+            },
+            {
+              "value": "papier",
+              "label": {
+                "en": "Paper",
+                "fr": "Papiers"
+              }
+            },
+            {
+              "value": "bio",
+              "label": {
+                "en": "Food waste",
+                "fr": "Biodéchets"
+              }
+            },
+            {
+              "value": "dv",
+              "label": {
+                "en": "Garden waste",
+                "fr": "Déchets verts"
+              }
+            },
+            {
+              "value": "enc",
+              "label": {
+                "en": "Bulky waste",
+                "fr": "Encombrants"
+              }
+            },
+            {
+              "value": "sapin",
+              "label": {
+                "en": "Christmas trees",
+                "fr": "Sapins"
+              }
+            }
+          ]
+        },
+        {
+          "key": "moment",
+          "type": "select",
+          "label": {
+            "en": "When",
+            "fr": "Quand"
+          },
+          "required": true,
+          "default": "eve_19",
+          "options": [
+            {
+              "value": "eve_17",
+              "label": {
+                "en": "The day before at 17:00",
+                "fr": "La veille à 17h"
+              }
+            },
+            {
+              "value": "eve_18",
+              "label": {
+                "en": "The day before at 18:00",
+                "fr": "La veille à 18h"
+              }
+            },
+            {
+              "value": "eve_19",
+              "label": {
+                "en": "The day before at 19:00",
+                "fr": "La veille à 19h"
+              }
+            },
+            {
+              "value": "eve_20",
+              "label": {
+                "en": "The day before at 20:00",
+                "fr": "La veille à 20h"
+              }
+            },
+            {
+              "value": "eve_21",
+              "label": {
+                "en": "The day before at 21:00",
+                "fr": "La veille à 21h"
+              }
+            },
+            {
+              "value": "eve_22",
+              "label": {
+                "en": "The day before at 22:00",
+                "fr": "La veille à 22h"
+              }
+            },
+            {
+              "value": "day_05",
+              "label": {
+                "en": "The same day at 5:00",
+                "fr": "Le jour même à 5h"
+              }
+            },
+            {
+              "value": "day_06",
+              "label": {
+                "en": "The same day at 6:00",
+                "fr": "Le jour même à 6h"
+              }
+            },
+            {
+              "value": "day_07",
+              "label": {
+                "en": "The same day at 7:00",
+                "fr": "Le jour même à 7h"
+              }
+            },
+            {
+              "value": "day_08",
+              "label": {
+                "en": "The same day at 8:00",
+                "fr": "Le jour même à 8h"
+              }
+            },
+            {
+              "value": "day_12",
+              "label": {
+                "en": "The same day at 12:00",
+                "fr": "Le jour même à 12h"
+              }
+            }
+          ]
+        }
+      ],
+      "variables": [
+        {
+          "key": "waste_label",
+          "type": "string",
+          "label": {
+            "en": "Waste collected",
+            "fr": "Déchets collectés"
+          },
+          "description": {
+            "en": "E.g. \"Household waste and Recycling (yellow bin)\"",
+            "fr": "Ex. « Ordures ménagères et Emballages (bac jaune) »"
+          }
+        },
+        {
+          "key": "date",
+          "type": "string",
+          "label": {
+            "en": "Collection date",
+            "fr": "Date de la collecte"
+          },
+          "description": {
+            "en": "E.g. \"mardi 6 octobre 2026\"",
+            "fr": "Ex. « mardi 6 octobre 2026 »"
+          }
+        },
+        {
+          "key": "days_before",
+          "type": "number",
+          "label": {
+            "en": "Days before the collection",
+            "fr": "Jours avant la collecte"
+          },
+          "description": {
+            "en": "1 the day before, 0 the same day",
+            "fr": "1 la veille, 0 le jour même"
+          }
         }
       ]
     }
