@@ -1,0 +1,308 @@
+{
+  "hits": {
+    "total": {
+      "value": 3
+    },
+    "hits": [
+      {
+        "_id": "176938",
+        "_source": {
+          "name": "Collecte des emballages - Porte-à-porte - SMICTOM VALCOBREIZH - Aubigné",
+          "metas": {
+            "sectorization": "single",
+            "garbage_types": ["emb"]
+          },
+          "schedules": [
+            {
+              "id": 1297919,
+              "name": null,
+              "schedule_type": "exception",
+              "opening_hours": "2027 Nov 02 11:00-23:59",
+              "start_at": "2027-11-02T00:00:00.000+00:00",
+              "end_at": "2027-11-02T00:00:00.000+00:00"
+            },
+            {
+              "id": 1297918,
+              "name": null,
+              "schedule_type": "closing_exception",
+              "opening_hours": "2027 Nov 01 off",
+              "start_at": "2027-11-01T00:00:00.000+00:00",
+              "end_at": "2027-11-01T00:00:00.000+00:00"
+            },
+            {
+              "id": 1297916,
+              "name": null,
+              "schedule_type": "closing_exception",
+              "opening_hours": "2027 May 17 off",
+              "start_at": "2027-05-17T00:00:00.000+00:00",
+              "end_at": "2027-05-17T00:00:00.000+00:00"
+            },
+            {
+              "id": 1297917,
+              "name": null,
+              "schedule_type": "exception",
+              "opening_hours": "2027 May 18 11:00-23:59",
+              "start_at": "2027-05-18T00:00:00.000+00:00",
+              "end_at": "2027-05-18T00:00:00.000+00:00"
+            },
+            {
+              "id": 1297914,
+              "name": null,
+              "schedule_type": "closing_exception",
+              "opening_hours": "2026 May 25 off",
+              "start_at": "2026-05-25T00:00:00.000+00:00",
+              "end_at": "2026-05-25T00:00:00.000+00:00"
+            },
+            {
+              "id": 1297915,
+              "name": null,
+              "schedule_type": "exception",
+              "opening_hours": "2026 May 26 11:00-23:59",
+              "start_at": "2026-05-26T00:00:00.000+00:00",
+              "end_at": "2026-05-26T00:00:00.000+00:00"
+            },
+            {
+              "id": 1297913,
+              "name": null,
+              "schedule_type": "exception",
+              "opening_hours": "2025 Jun 10 11:00-23:59",
+              "start_at": "2025-06-10T00:00:00.000+00:00",
+              "end_at": "2025-06-10T00:00:00.000+00:00"
+            },
+            {
+              "id": 1297912,
+              "name": null,
+              "schedule_type": "closing_exception",
+              "opening_hours": "2025 Jun 09 off",
+              "start_at": "2025-06-09T00:00:00.000+00:00",
+              "end_at": "2025-06-09T00:00:00.000+00:00"
+            },
+            {
+              "id": 831426,
+              "name": null,
+              "schedule_type": "regular",
+              "opening_hours": "2024 Mar 11-2030 Dec 30 week 02-53/2 Mo 11:00-23:59",
+              "start_at": "2026-01-05T11:00:00.000+00:00",
+              "end_at": "2028-12-25T23:59:00.000+00:00"
+            },
+            {
+              "id": 723117,
+              "name": "De Janvier 2023 à Septembre 2023",
+              "schedule_type": "closing_exception",
+              "opening_hours": "2023 Jan 01-2023 Sep 30 off",
+              "start_at": "2023-01-01T00:00:00.000+00:00",
+              "end_at": "2023-09-30T00:00:00.000+00:00"
+            },
+            {
+              "id": 717661,
+              "name": "Horaires de collecte",
+              "schedule_type": "regular",
+              "opening_hours": "2023 Jan 01-2024 Mar 11 week 01-53/2 Tu 10:00-23:59",
+              "start_at": "2026-01-01T00:00:00.000+00:00",
+              "end_at": "2026-12-31T00:00:00.000+00:00"
+            }
+          ]
+        }
+      },
+      {
+        "_id": "176861",
+        "_source": {
+          "name": "Collecte des ordures ménagères - Porte-à-porte - SMICTOM VALCOBREIZH - Aubigné",
+          "metas": {
+            "sectorization": "single",
+            "garbage_types": ["omr"]
+          },
+          "schedules": [
+            {
+              "id": 1296407,
+              "name": null,
+              "schedule_type": "exception",
+              "opening_hours": "2027 Nov 03 11:00-23:59",
+              "start_at": "2027-11-03T00:00:00.000+00:00",
+              "end_at": "2027-11-03T00:00:00.000+00:00"
+            },
+            {
+              "id": 1296406,
+              "name": null,
+              "schedule_type": "closing_exception",
+              "opening_hours": "2027 Nov 02 off",
+              "start_at": "2027-11-02T00:00:00.000+00:00",
+              "end_at": "2027-11-02T00:00:00.000+00:00"
+            },
+            {
+              "id": 1296404,
+              "name": null,
+              "schedule_type": "closing_exception",
+              "opening_hours": "2027 May 18 off",
+              "start_at": "2027-05-18T00:00:00.000+00:00",
+              "end_at": "2027-05-18T00:00:00.000+00:00"
+            },
+            {
+              "id": 1296405,
+              "name": null,
+              "schedule_type": "exception",
+              "opening_hours": "2027 May 19 11:00-23:59",
+              "start_at": "2027-05-19T00:00:00.000+00:00",
+              "end_at": "2027-05-19T00:00:00.000+00:00"
+            },
+            {
+              "id": 1296403,
+              "name": null,
+              "schedule_type": "exception",
+              "opening_hours": "2027 Mar 31 11:00-23:59",
+              "start_at": "2027-03-31T00:00:00.000+00:00",
+              "end_at": "2027-03-31T00:00:00.000+00:00"
+            },
+            {
+              "id": 1296402,
+              "name": null,
+              "schedule_type": "closing_exception",
+              "opening_hours": "2027 Mar 30 off",
+              "start_at": "2027-03-30T00:00:00.000+00:00",
+              "end_at": "2027-03-30T00:00:00.000+00:00"
+            },
+            {
+              "id": 1296401,
+              "name": null,
+              "schedule_type": "exception",
+              "opening_hours": "2026 Jul 15 11:00-23:59",
+              "start_at": "2026-07-15T00:00:00.000+00:00",
+              "end_at": "2026-07-15T00:00:00.000+00:00"
+            },
+            {
+              "id": 1296400,
+              "name": null,
+              "schedule_type": "closing_exception",
+              "opening_hours": "2026 Jul 14 off",
+              "start_at": "2026-07-14T00:00:00.000+00:00",
+              "end_at": "2026-07-14T00:00:00.000+00:00"
+            },
+            {
+              "id": 1296399,
+              "name": null,
+              "schedule_type": "exception",
+              "opening_hours": "2026 May 27 11:00-23:59",
+              "start_at": "2026-05-27T00:00:00.000+00:00",
+              "end_at": "2026-05-27T00:00:00.000+00:00"
+            },
+            {
+              "id": 1296398,
+              "name": null,
+              "schedule_type": "closing_exception",
+              "opening_hours": "2026 May 26 off",
+              "start_at": "2026-05-26T00:00:00.000+00:00",
+              "end_at": "2026-05-26T00:00:00.000+00:00"
+            },
+            {
+              "id": 1296397,
+              "name": null,
+              "schedule_type": "exception",
+              "opening_hours": "2026 Apr 08 11:00-23:59",
+              "start_at": "2026-04-08T00:00:00.000+00:00",
+              "end_at": "2026-04-08T00:00:00.000+00:00"
+            },
+            {
+              "id": 1296396,
+              "name": null,
+              "schedule_type": "closing_exception",
+              "opening_hours": "2026 Apr 07 off",
+              "start_at": "2026-04-07T00:00:00.000+00:00",
+              "end_at": "2026-04-07T00:00:00.000+00:00"
+            },
+            {
+              "id": 1296395,
+              "name": null,
+              "schedule_type": "exception",
+              "opening_hours": "2025 Nov 12 11:00-23:59",
+              "start_at": "2025-11-12T00:00:00.000+00:00",
+              "end_at": "2025-11-12T00:00:00.000+00:00"
+            },
+            {
+              "id": 1296394,
+              "name": null,
+              "schedule_type": "closing_exception",
+              "opening_hours": "2025 Nov 11 off",
+              "start_at": "2025-11-11T00:00:00.000+00:00",
+              "end_at": "2025-11-11T00:00:00.000+00:00"
+            },
+            {
+              "id": 1296393,
+              "name": null,
+              "schedule_type": "exception",
+              "opening_hours": "2025 Jul 16 11:00-23:59",
+              "start_at": "2025-07-16T00:00:00.000+00:00",
+              "end_at": "2025-07-16T00:00:00.000+00:00"
+            },
+            {
+              "id": 1296392,
+              "name": null,
+              "schedule_type": "closing_exception",
+              "opening_hours": "2025 Jul 15 off",
+              "start_at": "2025-07-15T00:00:00.000+00:00",
+              "end_at": "2025-07-15T00:00:00.000+00:00"
+            },
+            {
+              "id": 1296390,
+              "name": null,
+              "schedule_type": "closing_exception",
+              "opening_hours": "2025 Jun 10 off",
+              "start_at": "2025-06-10T00:00:00.000+00:00",
+              "end_at": "2025-06-10T00:00:00.000+00:00"
+            },
+            {
+              "id": 1296391,
+              "name": null,
+              "schedule_type": "exception",
+              "opening_hours": "2025 Jun 11 11:00-23:59",
+              "start_at": "2025-06-11T00:00:00.000+00:00",
+              "end_at": "2025-06-11T00:00:00.000+00:00"
+            },
+            {
+              "id": 1296389,
+              "name": null,
+              "schedule_type": "exception",
+              "opening_hours": "2025 Apr 23 11:00-23:59",
+              "start_at": "2025-04-23T00:00:00.000+00:00",
+              "end_at": "2025-04-23T00:00:00.000+00:00"
+            },
+            {
+              "id": 1296388,
+              "name": null,
+              "schedule_type": "closing_exception",
+              "opening_hours": "2025 Apr 22 off",
+              "start_at": "2025-04-22T00:00:00.000+00:00",
+              "end_at": "2025-04-22T00:00:00.000+00:00"
+            },
+            {
+              "id": 722326,
+              "name": "De Janvier 2023 à Septembre 2023",
+              "schedule_type": "closing_exception",
+              "opening_hours": "2023 Jan-Sep off;",
+              "start_at": "2023-01-01T00:00:00.000+00:00",
+              "end_at": "2023-09-30T00:00:00.000+00:00"
+            },
+            {
+              "id": 717525,
+              "name": "Horaires de collecte",
+              "schedule_type": "regular",
+              "opening_hours": "Tu 11:00-23:59",
+              "start_at": "2026-01-01T00:00:00.000+00:00",
+              "end_at": "2026-12-31T00:00:00.000+00:00"
+            }
+          ]
+        }
+      },
+      {
+        "_id": "175278",
+        "_source": {
+          "name": "Collecte des ordures ménagères - Points d'apport - SMICTOM VALCOBREIZH",
+          "metas": {
+            "sectorization": "multiple",
+            "garbage_types": ["omr"]
+          },
+          "schedules": []
+        }
+      }
+    ]
+  }
+}

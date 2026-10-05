@@ -1,0 +1,296 @@
+{
+  "manifest_version": 1,
+  "type": "device",
+  "name": "Waste Collection Schedule",
+  "description": {
+    "en": "Waste collection days from your own schedule or a provider (SMICTOM Valcobreizh…), with widget.",
+    "fr": "Jours de collecte des déchets : votre propre planning ou un fournisseur (SMICTOM Valcobreizh…)."
+  },
+  "version": "1.0.0",
+  "docker_image": "ghcr.io/quentinlegay/gladys-waste-collection-schedule:1.0.0",
+  "gladys_version": ">=5.1.0",
+  "cover_image": "https://raw.githubusercontent.com/quentinlegay/gladys-waste-collection-schedule/main/cover.png",
+  "categories": ["services", "environment"],
+  "config_schema": [
+    {
+      "key": "intro",
+      "type": "section",
+      "label": { "en": "Getting started", "fr": "Pour commencer" },
+      "description": {
+        "en": "Pick where the collection days come from. A provider knows the exact days, public holidays included: enter your address. Not covered yet? Describe your own schedule further down, in plain words. Then add the devices from the Discovery tab: a \"Next collection\" device and one device per waste type, with a \"days until collection\" sensor to use in your scenes.",
+        "fr": "Choisissez d'où viennent les jours de collecte. Un fournisseur connaît les jours exacts, jours fériés compris : saisissez votre adresse. Pas encore couvert ? Décrivez votre propre planning plus bas, en toutes lettres. Ajoutez ensuite les appareils depuis l'onglet Découverte : un appareil « Prochaine collecte » et un appareil par type de déchet, avec un capteur « jours avant la collecte » à utiliser dans vos scènes."
+      }
+    },
+    {
+      "key": "provider",
+      "type": "select",
+      "display": "radio",
+      "label": { "en": "Schedule source", "fr": "Source du planning" },
+      "required": true,
+      "default": "custom",
+      "options": [
+        {
+          "value": "custom",
+          "label": { "en": "My own schedule", "fr": "Mon propre planning" }
+        },
+        {
+          "value": "valcobreizh",
+          "label": {
+            "en": "SMICTOM Valcobreizh (Val d'Ille-Aubigné, Bretagne Romantique, Liffré-Cormier…)",
+            "fr": "SMICTOM Valcobreizh (Val d'Ille-Aubigné, Bretagne Romantique, Liffré-Cormier…)"
+          }
+        },
+        {
+          "value": "publidata",
+          "label": {
+            "en": "Another service using Publidata (instance id needed)",
+            "fr": "Autre collectivité utilisant Publidata (identifiant d'instance requis)"
+          }
+        }
+      ]
+    },
+    {
+      "key": "provider_section",
+      "type": "section",
+      "label": { "en": "Provider", "fr": "Fournisseur" },
+      "description": {
+        "en": "Your full address: the provider finds your collection sector with it (several sectors may share a town). Add the INSEE code of the town if the address is not recognized. Use the \"Preview the schedule\" button below to check the matched address.",
+        "fr": "Votre adresse complète : le fournisseur en déduit votre secteur de collecte (une commune peut en avoir plusieurs). Ajoutez le code INSEE de la commune si l'adresse n'est pas reconnue. Le bouton « Afficher le planning » ci-dessous montre l'adresse reconnue."
+      },
+      "links": [
+        {
+          "url": "https://www.valcobreizh.fr/mes-jours-de-collecte-des-dechets/",
+          "label": { "en": "Valcobreizh collection days", "fr": "Jours de collecte Valcobreizh" }
+        }
+      ]
+    },
+    {
+      "key": "address",
+      "type": "string",
+      "label": { "en": "Address", "fr": "Adresse" },
+      "placeholder": {
+        "en": "1 rue de la Mairie 35250 Aubigné",
+        "fr": "1 rue de la Mairie 35250 Aubigné"
+      },
+      "required": false
+    },
+    {
+      "key": "insee_code",
+      "type": "string",
+      "label": {
+        "en": "INSEE code of the town (optional)",
+        "fr": "Code INSEE de la commune (facultatif)"
+      },
+      "placeholder": { "en": "35007", "fr": "35007" },
+      "required": false
+    },
+    {
+      "key": "publidata_instance",
+      "type": "number",
+      "label": { "en": "Publidata instance id", "fr": "Identifiant d'instance Publidata" },
+      "description": {
+        "en": "Only for \"Another service using Publidata\". See the documentation to find it.",
+        "fr": "Uniquement pour « Autre collectivité utilisant Publidata ». Voir la documentation pour le trouver."
+      },
+      "required": false,
+      "min": 1
+    },
+    {
+      "key": "custom_section",
+      "type": "section",
+      "label": { "en": "My own schedule", "fr": "Mon propre planning" },
+      "description": {
+        "en": "One rule per waste type, in plain words; leave empty when not collected. Examples: \"tuesday\", \"monday and thursday\", \"monday even weeks\", \"friday every 2 weeks from 2026-01-09\", \"1st and 3rd wednesday\", \"wednesday from march to november\", \"2026-11-14, 2026-12-12\". Separate several rules with \";\". With a provider, these rules complete the types it does not return. Try a rule with the \"Test a rule\" button.",
+        "fr": "Une règle par type de déchet, en toutes lettres ; laissez vide si non collecté. Exemples : « mardi », « lundi et jeudi », « lundi semaines paires », « vendredi toutes les 2 semaines depuis le 09/01/2026 », « 1er et 3e mercredi », « mercredi de mars à novembre », « 14/11/2026, 12/12/2026 ». Séparez plusieurs règles par « ; ». Avec un fournisseur, ces règles complètent les types qu'il ne fournit pas. Essayez une règle avec le bouton « Tester une règle »."
+      }
+    },
+    {
+      "key": "rule_omr",
+      "type": "string",
+      "label": { "en": "Household waste", "fr": "Ordures ménagères" },
+      "placeholder": { "en": "tuesday", "fr": "mardi" },
+      "required": false
+    },
+    {
+      "key": "rule_emb",
+      "type": "string",
+      "label": { "en": "Recycling (yellow bin)", "fr": "Emballages (bac jaune)" },
+      "placeholder": { "en": "monday even weeks", "fr": "lundi semaines paires" },
+      "required": false
+    },
+    {
+      "key": "rule_verre",
+      "type": "string",
+      "label": { "en": "Glass", "fr": "Verre" },
+      "placeholder": { "en": "1st thursday", "fr": "1er jeudi" },
+      "required": false
+    },
+    {
+      "key": "rule_papier",
+      "type": "string",
+      "label": { "en": "Paper", "fr": "Papiers" },
+      "placeholder": { "en": "last friday", "fr": "dernier vendredi" },
+      "required": false
+    },
+    {
+      "key": "rule_bio",
+      "type": "string",
+      "label": { "en": "Food waste", "fr": "Biodéchets" },
+      "placeholder": { "en": "monday and thursday", "fr": "lundi et jeudi" },
+      "required": false
+    },
+    {
+      "key": "rule_dv",
+      "type": "string",
+      "label": { "en": "Garden waste", "fr": "Déchets verts" },
+      "placeholder": {
+        "en": "wednesday from march to november",
+        "fr": "mercredi de mars à novembre"
+      },
+      "required": false
+    },
+    {
+      "key": "rule_enc",
+      "type": "string",
+      "label": { "en": "Bulky waste", "fr": "Encombrants" },
+      "placeholder": { "en": "2026-11-14, 2027-05-15", "fr": "14/11/2026, 15/05/2027" },
+      "required": false
+    },
+    {
+      "key": "holiday_rule",
+      "type": "select",
+      "label": {
+        "en": "Public holidays (own schedule)",
+        "fr": "Jours fériés (planning personnel)"
+      },
+      "description": {
+        "en": "How your own schedule reacts to French public holidays. Providers already publish the shifted days.",
+        "fr": "Comment votre planning personnel réagit aux jours fériés. Les fournisseurs publient déjà les jours décalés."
+      },
+      "required": false,
+      "default": "shift_week",
+      "options": [
+        {
+          "value": "shift_week",
+          "label": {
+            "en": "The holiday and the following days of the week are collected one day later",
+            "fr": "Le jour férié et les jours suivants de la semaine sont décalés d'un jour"
+          }
+        },
+        {
+          "value": "shift_day",
+          "label": {
+            "en": "Only a collection on the holiday moves to the next day",
+            "fr": "Seule la collecte du jour férié est décalée au lendemain"
+          }
+        },
+        {
+          "value": "skip",
+          "label": {
+            "en": "No collection on public holidays",
+            "fr": "Pas de collecte les jours fériés"
+          }
+        },
+        {
+          "value": "none",
+          "label": {
+            "en": "Collected even on public holidays",
+            "fr": "Collecte maintenue les jours fériés"
+          }
+        }
+      ]
+    },
+    {
+      "key": "exceptions",
+      "type": "string",
+      "label": { "en": "Exceptions", "fr": "Exceptions" },
+      "description": {
+        "en": "Fix a day by hand, for every source. \"2026-12-25 > 2026-12-26\" moves, \"-2027-01-01\" cancels, \"+2026-12-31\" adds. Prefix with the type to target one (\"omr: \", \"emb: \", \"verre: \", \"papier: \", \"bio: \", \"dv: \", \"enc: \"). Separate with \";\".",
+        "fr": "Corrigez un jour à la main, quelle que soit la source. « 25/12/2026 > 26/12/2026 » déplace, « -01/01/2027 » annule, « +31/12/2026 » ajoute. Préfixez par le type pour en viser un seul (« omr: », « emb: », « verre: », « papier: », « bio: », « dv: », « enc: »). Séparez par « ; »."
+      },
+      "placeholder": {
+        "en": "omr: 2026-12-25 > 2026-12-26 ; emb: -2027-01-01",
+        "fr": "omr: 25/12/2026 > 26/12/2026 ; emb: -01/01/2027"
+      },
+      "required": false
+    },
+    {
+      "key": "language",
+      "type": "select",
+      "label": {
+        "en": "Language of device names and texts",
+        "fr": "Langue des noms d'appareils et des textes"
+      },
+      "required": false,
+      "default": "fr",
+      "options": [
+        { "value": "fr", "label": { "en": "French", "fr": "Français" } },
+        { "value": "en", "label": { "en": "English", "fr": "Anglais" } }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "key": "preview_schedule",
+      "label": { "en": "Preview the schedule", "fr": "Afficher le planning" },
+      "description": {
+        "en": "Downloads the provider data again and shows the next days of each waste type. Save the configuration first.",
+        "fr": "Retélécharge les données du fournisseur et affiche les prochains jours de chaque type de déchet. Enregistrez d'abord la configuration."
+      },
+      "timeout_seconds": 45
+    },
+    {
+      "key": "test_rule",
+      "label": { "en": "Test a rule", "fr": "Tester une règle" },
+      "description": {
+        "en": "Shows the next days of a rule, without saving it.",
+        "fr": "Affiche les prochains jours d'une règle, sans l'enregistrer."
+      },
+      "fields": [
+        {
+          "key": "rule",
+          "type": "string",
+          "label": { "en": "Rule", "fr": "Règle" },
+          "placeholder": {
+            "en": "friday every 2 weeks from 2026-01-09",
+            "fr": "vendredi toutes les 2 semaines depuis le 09/01/2026"
+          },
+          "required": true
+        }
+      ]
+    }
+  ],
+  "widgets": [
+    {
+      "key": "upcoming_collections",
+      "label": { "en": "Waste collections", "fr": "Collectes des déchets" },
+      "description": {
+        "en": "The next collection days, with a badge for today and tomorrow.",
+        "fr": "Les prochains jours de collecte, avec un badge pour aujourd'hui et demain."
+      },
+      "icon": "trash-2",
+      "settings": [
+        {
+          "key": "max_items",
+          "type": "number",
+          "label": { "en": "Number of rows", "fr": "Nombre de lignes" },
+          "required": false,
+          "default": 5,
+          "min": 1,
+          "max": 8
+        },
+        {
+          "key": "types",
+          "type": "multi_select",
+          "source": "devices",
+          "label": { "en": "Waste types", "fr": "Types de déchets" },
+          "description": {
+            "en": "Empty: every type.",
+            "fr": "Vide : tous les types."
+          },
+          "required": false
+        }
+      ]
+    }
+  ]
+}

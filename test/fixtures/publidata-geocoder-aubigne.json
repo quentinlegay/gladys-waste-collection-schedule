@@ -1,0 +1,40 @@
+[
+  {
+    "data": {
+      "type": "FeatureCollection",
+      "version": "draft",
+      "features": [
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [-1.635047, 48.294456]
+          },
+          "properties": {
+            "label": "1 Rue de la Mairie 35250 Aubigné",
+            "score": 0.853131818181818,
+            "housenumber": "1",
+            "id": "35007_0024_00001",
+            "name": "1 Rue de la Mairie",
+            "postcode": "35250",
+            "citycode": "35007",
+            "x": 356438.34,
+            "y": 6809433.78,
+            "city": "Aubigné",
+            "context": "35, Ille-et-Vilaine, Bretagne",
+            "type": "housenumber",
+            "importance": 0.38445,
+            "street": "Rue de la Mairie"
+          }
+        }
+      ],
+      "attribution": "BAN",
+      "licence": "ETALAB-2.0",
+      "query": "1 rue de la mairie",
+      "filters": {
+        "citycode": "35007"
+      },
+      "limit": 3
+    }
+  }
+]
