@@ -10,10 +10,7 @@
   "docker_image": "ghcr.io/quentinlegay/gladys-waste-collection-schedule:1.0.1",
   "gladys_version": ">=5.1.0",
   "cover_image": "https://raw.githubusercontent.com/quentinlegay/gladys-waste-collection-schedule/main/cover.png",
-  "categories": [
-    "services",
-    "environment"
-  ],
+  "categories": ["services", "environment"],
   "config_schema": [
     {
       "key": "intro",
